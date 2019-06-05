@@ -3,6 +3,7 @@ package interfaz;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -15,6 +16,8 @@ import javax.swing.JSeparator;
 import java.awt.GridBagLayout;
 import java.awt.image.ImagingOpException;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class InterfazRompecabezas extends JFrame {
 
@@ -28,13 +31,12 @@ public class InterfazRompecabezas extends JFrame {
 	private JPanel contentPane;
 	private JPanel panelEleccion;
 	private Image[][] piezas;
-	
+	Editor editor;
 	
 	/*
 	 * Atributos de prueba
 	 */
-	JPanel panel_Pruebas_Piezas;
-	GridBagLayout gbl_panel_1;
+
 	
 	/*
 	 * Nombre provisional
@@ -42,24 +44,33 @@ public class InterfazRompecabezas extends JFrame {
 	
 	public void piezasIMG() {
 		
+		contentPane.removeAll();
+		
 		ArrayList<MyLabelPiezas> listaPiezas = new ArrayList<MyLabelPiezas>();
+		
+		JPanel panel_Piezas = new JPanel();
+		contentPane.add(panel_Piezas, BorderLayout.CENTER);
+		GridBagLayout gbl_panel_Piezas = new GridBagLayout();
+		gbl_panel_Piezas.columnWidths = new int[]{0};
+		gbl_panel_Piezas.rowHeights = new int[]{0};
+		gbl_panel_Piezas.columnWeights = new double[]{0};
+		gbl_panel_Piezas.rowWeights = new double[]{0};
+		panel_Piezas.setLayout(gbl_panel_Piezas);
+		
 		
 		try {
 			
 			/*
 			 * TODO sacar fuera para mayor facilidad a la hora de llamar a sus funciones
 			 */
-			Editor prueba = new Editor(6);
-
-			this.piezas = prueba.getImagenes();
+			this.piezas = editor.getImagenes();
 			
 			int ite = 0;
 			for (int i = 0; i < piezas.length; i++) {
-				for (int j = 0; j < piezas.length; j++) {
+				for (int j = 0; j < piezas[0].length; j++) {
 					
 					listaPiezas.add(new MyLabelPiezas(piezas[i][j], i, j));
-
-					panel_Pruebas_Piezas.add(listaPiezas.get(ite), listaPiezas.get(ite).getGbc_label());
+					panel_Piezas.add(listaPiezas.get(ite), listaPiezas.get(ite).getGbc_label());
 					ite++;
 				}
 			}
@@ -69,6 +80,8 @@ public class InterfazRompecabezas extends JFrame {
 			e.printStackTrace();
 		} 
 		
+		contentPane.revalidate();
+		contentPane.repaint();
 	}
 	
 	/*
@@ -76,18 +89,39 @@ public class InterfazRompecabezas extends JFrame {
 	 */
 	public void insertarElecciones() {
 		
+		contentPane.removeAll();
+		
 		panelEleccion = new JPanel();
+		ArrayList<MyLabelEleccion> elecciones = new ArrayList<MyLabelEleccion>();
+		
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_1.columnWidths = new int[]{0};
+		gbl_panel_1.rowHeights = new int[]{0};
+		gbl_panel_1.columnWeights = new double[]{0};
+		gbl_panel_1.rowWeights = new double[]{0};
+		panelEleccion.setLayout(gbl_panel_1);
 		
+		int ite = 0;
 		
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				
+				/*
+				 * TODO implementar el añadir las imagenes predeterminadas
+				 */
+				URL url = getClass().getResource("/img/hatsune.png");
+				elecciones.add(new MyLabelEleccion(editor.reescalarIMG(url, 150), i, j, this));
+				
+				panelEleccion.add(elecciones.get(ite), elecciones.get(ite).getGbc_label());
+				ite++;
+			}
+		} 
 		
 		panelEleccion.setLayout(gbl_panel_1);
 		
 		contentPane.add(panelEleccion, BorderLayout.CENTER);
+		contentPane.revalidate();
+		contentPane.repaint();
 	}
 	
 	/*
@@ -130,6 +164,11 @@ public class InterfazRompecabezas extends JFrame {
 	 */
 	public InterfazRompecabezas() {
 		
+		/*
+		 * TODO mover editor dentro de la función correspondiente para poder modificar el número de piezas del rompecabezas
+		 */
+		editor = new Editor(6);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 770, 770);
 		setResizable(false);
@@ -145,6 +184,12 @@ public class InterfazRompecabezas extends JFrame {
 		 * predeterminados
 		 */
 		JMenuItem nuevaPartida = new JMenuItem("Nueva Partida");
+		nuevaPartida.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				insertarElecciones();
+			}
+		});
 		mnArchivo.add(nuevaPartida);
 		
 		/*
@@ -152,7 +197,24 @@ public class InterfazRompecabezas extends JFrame {
 		 * 
 		 */
 		JMenuItem mntmSubirPropio = new JMenuItem("Subir Propio");
+		mntmSubirPropio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				/*
+				 * TODO implementar las llamadas para crear el rompecabezas
+				 *	buscarImagen devuelve Image
+				 */
+				editor.buscarImagen();
+			}
+		});
 		mnArchivo.add(mntmSubirPropio);
+		
+		JMenuItem mntmDificultad = new JMenuItem("Dificultad");
+		mntmDificultad.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO llamar a JDialogo
+			}
+		});
+		mnArchivo.add(mntmDificultad);
 		
 		JSeparator separator = new JSeparator();
 		mnArchivo.add(separator);
@@ -163,22 +225,11 @@ public class InterfazRompecabezas extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
-		panel_Pruebas_Piezas = new JPanel();
-		contentPane.add(panel_Pruebas_Piezas, BorderLayout.CENTER);
-		gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{0};
-		gbl_panel_1.rowHeights = new int[]{0};
-		gbl_panel_1.columnWeights = new double[]{0};
-		gbl_panel_1.rowWeights = new double[]{0};
-		panel_Pruebas_Piezas.setLayout(gbl_panel_1);
-		
-		
+	
 		/*
-		 * Prueba de funciones
+		 * Se ha de llamar en la ejecución
 		 */
-		piezasIMG();
-
+		insertarElecciones();
 		
 
 		

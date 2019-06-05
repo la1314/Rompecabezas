@@ -40,6 +40,7 @@ public class PruebasBuscador extends JFrame{
           
            //if the user click on save in Jfilechooser
           if(result == JFileChooser.APPROVE_OPTION){
+        	  
               File selectedFile = file.getSelectedFile();
               String path = selectedFile.getAbsolutePath();
               

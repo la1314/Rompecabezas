@@ -2,7 +2,6 @@ package interfaz;
 
 import java.awt.GridBagConstraints;
 import java.awt.Image;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -14,13 +13,14 @@ public class MyLabelPiezas extends JLabel {
 	private int id;
 	private int fila;
 	private int columna;
+	private ImageIcon icon;
 	private GridBagConstraints gbc_label;
 	
 	private static final long serialVersionUID = 1L;
 
 	public MyLabelPiezas(Image pieza, int x, int y) {
 		
-		ImageIcon icon = new ImageIcon(pieza); 
+		icon = new ImageIcon(pieza); 
 		this.setIcon(icon);
 		gbc_label = new GridBagConstraints();
 		gbc_label.gridx = y;
