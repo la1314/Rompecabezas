@@ -8,9 +8,14 @@ import java.awt.image.FilteredImageSource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import interfaz.InterfazRompecabezas;
 
 public class Editor extends Component {
 
@@ -19,17 +24,13 @@ public class Editor extends Component {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Image[][] imagenes;
+	private ArrayList<String> predeterminadas;
+	private int dificultad;
 
-	public Editor(int lados) {
+	public Editor() {
 
-		imagenes = new Image[lados][lados];
-
-		try {
-			creandoParticiones(lados);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		facil();
+		rellenarPredetarminadas(predeterminadas);
 
 	}	
 
@@ -37,12 +38,12 @@ public class Editor extends Component {
 	 * Función para recortar la imagen, dichos recortes se añadirán
 	 * a la matriz de imagen
 	 */
-	private void creandoParticiones(int particiones) throws IOException {
+	public void creandoParticiones(int particiones, String nombre) throws IOException {
 
 		/*
 		 * TODO Modificar para recibir el nombre de la imagen como parámetro
 		 */
-		URL url = getClass().getResource("/img/hatsune.png");
+		URL url = getClass().getResource("/img/"+nombre+".png");
 
 		/*
 		 * Contenedor de la imagen
@@ -79,23 +80,34 @@ public class Editor extends Component {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		/*
-		 * Por defectorrrrr 700/700
-		 */
-		
+
 		Image dimg = img.getScaledInstance(tamanyo, tamanyo, Image.SCALE_SMOOTH);
 		return dimg;
 	}
 
+	public Image reescalarIMG(File file, int tamanyo) {
+
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Image dimg = img.getScaledInstance(tamanyo, tamanyo, Image.SCALE_SMOOTH);
+		return dimg;
+	}
+	
 	/*
 	 * Función que abre un FileChooser para subir una imagen propia, devuelve
 	 * una imagen a la cual se le aplicarán las funciones para crear un rompecabeza
 	 */
-	public Image buscarImagen() {
+	public void buscarImagen(int dificultad, InterfazRompecabezas interfaz) {
 
+		
+		
 		Image imagen = null;
-
+		
 		JFileChooser file = new JFileChooser();
 		file.setCurrentDirectory(new File(System.getProperty("user.home")));
 
@@ -107,17 +119,35 @@ public class Editor extends Component {
 		//if the user click on save in Jfilechooser
 		if(result == JFileChooser.APPROVE_OPTION){
 
-			File selectedFile = file.getSelectedFile();
-			String path = selectedFile.getAbsolutePath();
-			URL url = getClass().getResource(path);
-			/*
-			 * Modificar este apartado para concordar al funcionamiento del rompecabezas
-			 */
+			ladosImagen(dificultad);
 			
-			imagen = reescalarIMG(url, 700);
+			File selectedFile = file.getSelectedFile();
+			File ruta = selectedFile.getAbsoluteFile();
+			
+			Image imagenPrincipal = reescalarIMG(ruta, 700);
+			int width = imagenPrincipal.getWidth(null);
+			int height = imagenPrincipal.getHeight(null);
+
+			/*
+			 * Ingresa en una matriz cuadrada
+			 */
+			for (int i = 0; i < dificultad; i++) {
+				for (int j = 0; j < dificultad; j++) {
+					
+					Image TempImage = createImage(new FilteredImageSource(imagenPrincipal.getSource(), new CropImageFilter(j * (width/ dificultad) , i * (height / dificultad), width / dificultad, height / dificultad)));
+
+					/*
+					 * Añadiendo las partes de la imagen a la matriz de imagenes
+					 */
+					imagenes[i][j] = TempImage;
+
+				}
+			}
+			
+			interfaz.setPiezas(getImagenes());
+			interfaz.piezasIMG();
 		}
 
-		return imagen;
 	}
 
 	/*
@@ -125,6 +155,43 @@ public class Editor extends Component {
 	 */
 	public Image[][] getImagenes() {
 		return imagenes;
+	}
+
+	public void rellenarPredetarminadas(ArrayList<String> predeterminadas) {
+		this.predeterminadas = new ArrayList<String>();
+		this.predeterminadas.add("Hatsune");
+		this.predeterminadas.add("Woft");
+		this.predeterminadas.add("Jhin");
+		this.predeterminadas.add("Warlock");
+		this.predeterminadas.add("Annie");
+		this.predeterminadas.add("Sylvanas");
+		this.predeterminadas.add("Vi");
+		this.predeterminadas.add("Arthas");
+		this.predeterminadas.add("Overlord");
+	}
+
+	public ArrayList<String> getPredeterminadas() {
+		return predeterminadas;
+	}
+
+	public void ladosImagen(int lados) {
+		imagenes = new Image[lados][lados];
+	}
+
+	public void facil() {
+		this.dificultad = 5;
+	}
+
+	public void normal() {
+		this.dificultad = 8;
+	}
+
+	public void dificil() {
+		this.dificultad = 14;
+	}
+
+	public int getDificultad() {
+		return dificultad;
 	}
 
 }

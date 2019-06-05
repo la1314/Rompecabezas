@@ -1,7 +1,10 @@
 package interfaz;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
+
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -20,6 +23,7 @@ public class MyLabelPiezas extends JLabel {
 
 	public MyLabelPiezas(Image pieza, int x, int y) {
 		
+		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.decode("#000714")));
 		icon = new ImageIcon(pieza); 
 		this.setIcon(icon);
 		gbc_label = new GridBagConstraints();
