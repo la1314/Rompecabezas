@@ -2,7 +2,6 @@ package interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -24,25 +23,27 @@ public class InterfazRompecabezas extends JFrame {
 	/**
 	 * Atributos de clase
 	 */
-	
+
 	private JPanel panel;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelEleccion;
+	private JPanel panel_Piezas;
+	private ArrayList<MyLabelPiezas> listaPiezas;
 	private Image[][] piezas;
 	private Editor editor;
 	private ArrayList<String> imgPredeterminadas;
 	private JDificultad dialogoDificultad;
-	
+
 	/*
 	 * Nombre provisional
 	 */
-	
-	public void piezasIMG() {
-		
+
+	public void generarPiezas() {
+
 		contentPane.removeAll();
-		ArrayList<MyLabelPiezas> listaPiezas = new ArrayList<MyLabelPiezas>();
-		JPanel panel_Piezas = new JPanel();
+		listaPiezas = new ArrayList<MyLabelPiezas>();
+		panel_Piezas = new JPanel();
 		contentPane.add(panel_Piezas, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_Piezas = new GridBagLayout();
 		gbl_panel_Piezas.columnWidths = new int[]{0};
@@ -50,39 +51,48 @@ public class InterfazRompecabezas extends JFrame {
 		gbl_panel_Piezas.columnWeights = new double[]{0};
 		gbl_panel_Piezas.rowWeights = new double[]{0};
 		panel_Piezas.setLayout(gbl_panel_Piezas);
-		
-		
+
+
 		try {
 			this.piezas = editor.getImagenes();
-			
+
 			int ite = 0;
 			for (int i = 0; i < piezas.length; i++) {
 				for (int j = 0; j < piezas[0].length; j++) {
-					
-					listaPiezas.add(new MyLabelPiezas(piezas[i][j], i, j));
+
+					/*
+					 * Se añade al arrayList de labels la imagen, posiciones e ID correspondientes
+					 */
+					listaPiezas.add(new MyLabelPiezas(piezas[j][i], i, j, this));
+					listaPiezas.get(ite).setId(ite);
+					/*
+					 * 
+					 */
 					panel_Piezas.add(listaPiezas.get(ite), listaPiezas.get(ite).getGbc_label());
 					ite++;
+					
 				}
 			}
 			
-		} catch (ImagingOpException e) {
 			
+		} catch (ImagingOpException e) {
+
 			e.printStackTrace();
 		} 
-		
+
 		contentPane.revalidate();
-		contentPane.repaint();
+//		contentPane.repaint();
 	}
-	
+
 	public void setPiezas(Image[][] piezas) {
 		this.piezas = piezas;
 	}
-	
+
 	/*
 	 * Función que contiene los rompezabecas predeterminados
 	 */
 	public void insertarElecciones() {
-		
+
 		contentPane.removeAll();
 		panelEleccion = new JPanel();
 		ArrayList<MyLabelEleccion> elecciones = new ArrayList<MyLabelEleccion>();
@@ -92,48 +102,70 @@ public class InterfazRompecabezas extends JFrame {
 		gbl_panel_1.columnWeights = new double[]{0};
 		gbl_panel_1.rowWeights = new double[]{0};
 		panelEleccion.setLayout(gbl_panel_1);
-		
+
 		int ite = 0;
-		
+
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				
+
 				String nombre = imgPredeterminadas.get(ite);
 				URL url = getClass().getResource("/img/"+nombre+".png");
 
-				
+
 				elecciones.add(new MyLabelEleccion(editor.reescalarIMG(url, 240), i, j, this, editor, nombre, editor.getDificultad()));
 				panelEleccion.add(elecciones.get(ite), elecciones.get(ite).getGbc_label());
 				ite++;
 			}
 		} 
-		
+
 		panelEleccion.setLayout(gbl_panel_1);
-		
+
 		contentPane.add(panelEleccion, BorderLayout.CENTER);
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
 	
 	/*
-	 * TODO funcion de prueba antes de modificar PEditor
-	 * de momento no funcionam Jorge del futuro se encargará de ver que hacer con esta mierda
+	 * Realiza el movimiento de piezas, donde las piezas inicial y cambio (pieza negra) intercambiarán posiciones
 	 */
-//	public void insertarRompecabezas() {
-//		try {
-//			contentPane.removeAll();
-//			panel = new JPanel();
-//			contentPane.add(panel, BorderLayout.CENTER);
-//			PEditor x = new PEditor();
-//			panel.add(x);
-//			contentPane.revalidate();
-//			contentPane.repaint();
-//		} catch (IOException e) {
-//			
-//			e.printStackTrace();
-//		}
-//	}
+	public void realizarMovimientos(int inicial, int cambio) {
+		
+		int filaInicial, columnaInicial, filaCambio, columnaCambio;
+		
+		filaInicial = listaPiezas.get(inicial).getFila();
+		columnaInicial = listaPiezas.get(inicial).getColumna();
+		
+		System.out.println(filaInicial);
+		System.out.println(columnaInicial);
+		
+		filaCambio = listaPiezas.get(cambio).getFila();
+		columnaCambio = listaPiezas.get(cambio).getColumna();
+		System.out.println(filaCambio);
+		System.out.println(columnaCambio);
+		
+		/*
+		 * Se tiene que remover ambas piezas 
+		 */
+		panel_Piezas.remove(listaPiezas.get(inicial));
+		panel_Piezas.remove(listaPiezas.get(cambio));
+		
 	
+		/*
+		 * Reescritura y posición de inicial
+		 */
+		listaPiezas.get(inicial).cambioPosicion(filaCambio, columnaCambio);
+		panel_Piezas.add(listaPiezas.get(inicial), listaPiezas.get(inicial).getGbc_label());
+		
+		/*
+		 * Reescritura y posición de cambio
+		 */
+		listaPiezas.get(cambio).cambioPosicion(filaInicial, columnaInicial);
+		panel_Piezas.add(listaPiezas.get(cambio), listaPiezas.get(cambio).getGbc_label());
+		
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
+
 	/**
 	 * Launch the application.
 	 */
@@ -154,79 +186,81 @@ public class InterfazRompecabezas extends JFrame {
 	 * Create the frame.
 	 */
 	public InterfazRompecabezas() {
-		
+
 		editor = new Editor();
 		imgPredeterminadas = editor.getPredeterminadas();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 780, 780);
 		setResizable(false);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		JMenu mnArchivo = new JMenu("Archivo");
 		menuBar.add(mnArchivo);
-		
-		/*
-		 * Ha de llamar a la función que muestras el menú principal para la elección de los rompecabezas
-		 * predeterminados
-		 */
+
 		JMenuItem nuevaPartida = new JMenuItem("Nueva Partida");
 		nuevaPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				insertarElecciones();
-				
+
 			}
 		});
 		mnArchivo.add(nuevaPartida);
-		
+
 		JMenuItem mntmSubirPropio = new JMenuItem("Subir Propio");
 		mntmSubirPropio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*
-				 * TODO implementar las llamadas para crear el rompecabezas
-				 *	buscarImagen devuelve Image
-				 */
+				
 				editor.buscarImagen(editor.getDificultad(), devolverInterfaz());
+				
 			}
 		});
 		mnArchivo.add(mntmSubirPropio);
-		
+
 		JMenuItem mntmDificultad = new JMenuItem("Dificultad");
-		
 		mntmDificultad.addActionListener(new ActionListener() {
-			
+
 			public void actionPerformed(ActionEvent e) {
-				
+
 				dialogoDificultad = new JDificultad(editor, devolverInterfaz());
-				
+
 			}
 		});
 		mnArchivo.add(mntmDificultad);
-		
+
 		JSeparator separator = new JSeparator();
 		mnArchivo.add(separator);
-		
+
 		JMenuItem mntmSalir = new JMenuItem("Salir");
+		mntmSalir.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				System.exit(0);
+
+			}
+		});
 		mnArchivo.add(mntmSalir);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-	
+
 		/*
 		 * Se ha de llamar en la ejecución
 		 */
 		insertarElecciones();
 	}
-	
+
 	/*
 	 * No me dejaba pasar la interfaz como parámetro si no hacía esta guarrada
 	 */
 	public InterfazRompecabezas devolverInterfaz() {
 		return this;
 	}
-	
+
 }

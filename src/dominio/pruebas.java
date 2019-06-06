@@ -14,6 +14,8 @@ public class pruebas {
 				{"1", "1", "1", "1"}
 		};
 		
+		Movimientos x = new Movimientos(25, 5);
+		x.lectura();
 		
 		
 	}

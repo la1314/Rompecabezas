@@ -9,18 +9,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import interfaz.InterfazRompecabezas;
 
 public class Editor extends Component {
 
 	/*
-	 * 
+	 * Atributos
 	 */
 	private static final long serialVersionUID = 1L;
 	private Image[][] imagenes;
@@ -40,9 +37,6 @@ public class Editor extends Component {
 	 */
 	public void creandoParticiones(int particiones, String nombre) throws IOException {
 
-		/*
-		 * TODO Modificar para recibir el nombre de la imagen como parámetro
-		 */
 		URL url = getClass().getResource("/img/"+nombre+".png");
 
 		/*
@@ -105,9 +99,6 @@ public class Editor extends Component {
 	public void buscarImagen(int dificultad, InterfazRompecabezas interfaz) {
 
 		
-		
-		Image imagen = null;
-		
 		JFileChooser file = new JFileChooser();
 		file.setCurrentDirectory(new File(System.getProperty("user.home")));
 
@@ -145,7 +136,7 @@ public class Editor extends Component {
 			}
 			
 			interfaz.setPiezas(getImagenes());
-			interfaz.piezasIMG();
+			interfaz.generarPiezas();
 		}
 
 	}

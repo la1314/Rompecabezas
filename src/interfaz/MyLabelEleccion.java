@@ -44,7 +44,7 @@ public class MyLabelEleccion extends JLabel {
 				}
 				
 				interfaz.setPiezas(editor.getImagenes());
-				interfaz.piezasIMG();
+				interfaz.generarPiezas();
 			}
 		});
 	}
