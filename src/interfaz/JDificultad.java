@@ -1,5 +1,8 @@
 package interfaz;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -24,12 +27,15 @@ public class JDificultad extends JDialog {
 		
 		
 		setBounds(100, 100, 400, 265);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBackground(Color.decode("#232733"));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		
 		
 		JButton btnFacil = new MyButton("Facíl");
 		btnFacil.addActionListener(new ActionListener() {
@@ -38,7 +44,6 @@ public class JDificultad extends JDialog {
 				
 				editor.facil();
 				interfaz.insertarElecciones();
-				
 				dispose();
 			}
 		});

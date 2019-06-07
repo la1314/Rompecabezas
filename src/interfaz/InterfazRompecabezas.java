@@ -1,6 +1,8 @@
 package interfaz;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.net.URL;
 import java.util.ArrayList;
@@ -9,16 +11,17 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import dominio.Editor;
 import dominio.Movimientos;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JSeparator;
 import java.awt.GridBagLayout;
-import java.awt.image.ImagingOpException;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
 
 public class InterfazRompecabezas extends JFrame {
 
@@ -26,7 +29,6 @@ public class InterfazRompecabezas extends JFrame {
 	 * Atributos de clase
 	 */
 
-	private JPanel panel;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelEleccion;
@@ -48,6 +50,7 @@ public class InterfazRompecabezas extends JFrame {
 		contentPane.removeAll();
 		listaPiezas = new ArrayList<MyLabelPiezas>();
 		panel_Piezas = new JPanel();
+		panel_Piezas.setBackground(Color.decode("#232733"));
 		contentPane.add(panel_Piezas, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_Piezas = new GridBagLayout();
 		gbl_panel_Piezas.columnWidths = new int[]{0};
@@ -57,21 +60,11 @@ public class InterfazRompecabezas extends JFrame {
 		panel_Piezas.setLayout(gbl_panel_Piezas);
 		jugabilidad = new Movimientos(editor.getDificultad()*editor.getDificultad(), editor.getDificultad());
 
-		//		try {
-		//			
-
+		
 		generarLabelsOrdenados();
-
 		ingresarPiezasAleatorias();
 
-
-		//		} catch (ImagingOpException e) {
-		//
-		//			e.printStackTrace();
-		//		} 
-
 		contentPane.revalidate();
-		//		contentPane.repaint();
 	}
 
 	/*
@@ -90,10 +83,6 @@ public class InterfazRompecabezas extends JFrame {
 				 */
 				listaPiezas.add(new MyLabelPiezas(piezas[j][i], i, j, this, jugabilidad));
 				listaPiezas.get(ite).setId(ite);
-				/*
-				 * 
-				 */
-				//					panel_Piezas.add(listaPiezas.get(ite), listaPiezas.get(ite).getGbc_label());
 				ite++;
 
 			}
@@ -136,6 +125,7 @@ public class InterfazRompecabezas extends JFrame {
 
 		contentPane.removeAll();
 		panelEleccion = new JPanel();
+		panelEleccion.setBackground(Color.decode("#232733"));
 		ArrayList<MyLabelEleccion> elecciones = new ArrayList<MyLabelEleccion>();
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[]{0};
@@ -151,11 +141,10 @@ public class InterfazRompecabezas extends JFrame {
 
 				String nombre = imgPredeterminadas.get(ite);
 				URL url = getClass().getResource("/img/"+nombre+".png");
-
-
 				elecciones.add(new MyLabelEleccion(editor.reescalarIMG(url, 240), i, j, this, editor, nombre, editor.getDificultad()));
 				panelEleccion.add(elecciones.get(ite), elecciones.get(ite).getGbc_label());
 				ite++;
+				
 			}
 		} 
 
@@ -166,6 +155,19 @@ public class InterfazRompecabezas extends JFrame {
 		contentPane.repaint();
 	}
 
+	public void imgCompleta() {
+		
+		contentPane.removeAll();
+		JPanel panel_IMG_Completa = new JPanel();
+		panel_IMG_Completa.setBackground(Color.decode("#232733"));
+		contentPane.add(panel_IMG_Completa, BorderLayout.NORTH);
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(editor.getImagenPrincipal()));
+		panel_IMG_Completa.add(label);
+		
+		contentPane.revalidate();
+	}
+	
 	/*
 	 * Realiza el movimiento de piezas, donde las piezas inicial y cambio (pieza negra) intercambiarán posiciones
 	 */
@@ -180,7 +182,6 @@ public class InterfazRompecabezas extends JFrame {
 		columnaCambio = listaPiezas.get(cambio).getColumna();
 
 		jugabilidad.cambiarPosicion(filaInicial, columnaInicial, filaCambio, columnaCambio);
-		jugabilidad.lectura();
 		/*
 		 * Se tiene que remover ambas piezas 
 		 */
@@ -204,8 +205,10 @@ public class InterfazRompecabezas extends JFrame {
 		contentPane.repaint();
 		
 		if (jugabilidad.comparar()) {
-			System.out.println("Haz ganado");
 			
+			JDGanador felicidades = new JDGanador(devolverInterfaz());
+			felicidades.setVisible(true);
+			imgCompleta();
 		}
 		
 	}
@@ -230,14 +233,16 @@ public class InterfazRompecabezas extends JFrame {
 	 * Create the frame.
 	 */
 	public InterfazRompecabezas() {
-
+		
+		setResizable(false);
 		editor = new Editor();
 		imgPredeterminadas = editor.getPredeterminadas();
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 780, 780);
-		setResizable(false);
-
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+		
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -290,6 +295,7 @@ public class InterfazRompecabezas extends JFrame {
 		mnArchivo.add(mntmSalir);
 
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.decode("#232733"));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -298,6 +304,7 @@ public class InterfazRompecabezas extends JFrame {
 		 * Se ha de llamar en la ejecución
 		 */
 		insertarElecciones();
+		
 	}
 
 	/*

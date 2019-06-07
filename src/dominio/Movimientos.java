@@ -47,22 +47,6 @@ public class Movimientos {
 	}
 	
 	
-	public void lectura() {
-		for (int i = 0; i < matrizAleatoria.length; i++) {
-			for (int j = 0; j < matrizAleatoria.length; j++) {
-				System.out.print(matrizAleatoria[i][j] + "   ");
-			}
-			System.out.println();
-		}
-//		System.out.println();
-//		for (int i = 0; i < matrizAleatoria.length; i++) {
-//			for (int j = 0; j < matrizAleatoria.length; j++) {
-//				System.out.print(matrizPrincipal[i][j] + "   ");
-//			}
-//			System.out.println();
-//		}
-	}
-	
 	/*
 	 * Crea las dos matrices, una ordenada y la otra la rellena con valores aleatorios
 	 */
@@ -96,21 +80,13 @@ public class Movimientos {
 		boolean movimientoPosible = false;
 		
 		/*
-		 * TODO X e Y guardan la posición donde es posible mover, faltan modificaciones en la función
-		 * para ver viabilidad con la interfaz gráfica
-		 */
-		
-		int x = 0;
-		int y = 0;
-		
-		/*
 		 * Comprobación con label superior
 		 */
 		try {
 			if ( matrizAleatoria[fila-1][columna] == ID) {
+				
 				movimientoPosible = true;
-				x = fila-1;
-				y = columna;
+			
 			}
 
 			
@@ -123,9 +99,9 @@ public class Movimientos {
 		 */
 		try {
 			if (matrizAleatoria[fila+1][columna] == ID ) {
+				
 				movimientoPosible = true;
-				x = fila+1;
-				y = columna;
+			
 			}
 
 			
@@ -138,9 +114,9 @@ public class Movimientos {
 		 */
 		try {
 			if (matrizAleatoria[fila][columna-1] == ID ) {
+				
 				movimientoPosible = true;
-				x = fila;
-				y = columna-1;
+			
 			}
 
 			
@@ -153,9 +129,9 @@ public class Movimientos {
 		 */
 		try {
 			if (matrizAleatoria[fila][columna+1] == ID ) {
+				
 				movimientoPosible = true;
-				x = fila;
-				y = columna+1;
+			
 			}
 
 			
@@ -172,9 +148,6 @@ public class Movimientos {
 	public void cambiarPosicion(int filaInicio, int columnaInicio, int filaCambio, int columnaCambio ) {
 		
 		int valorInicio = matrizAleatoria[filaInicio][columnaInicio];
-		
-		System.out.println("ID INICIO " + matrizAleatoria[filaInicio][columnaInicio]);
-		System.out.println("ID CAMBIO " + matrizAleatoria[filaCambio][columnaCambio]);
 		
 		matrizAleatoria[filaInicio][columnaInicio] = matrizAleatoria[filaCambio][columnaCambio];
 		matrizAleatoria[filaCambio][columnaCambio] = valorInicio;

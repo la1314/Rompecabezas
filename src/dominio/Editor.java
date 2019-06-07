@@ -23,7 +23,7 @@ public class Editor extends Component {
 	private Image[][] imagenes;
 	private ArrayList<String> predeterminadas;
 	public static int dificultad;
-
+	Image imagenPrincipal;
 	public Editor() {
 
 		facil();
@@ -42,7 +42,7 @@ public class Editor extends Component {
 		/*
 		 * Contenedor de la imagen
 		 */
-		Image imagenPrincipal = reescalarIMG(url, 700);	
+		imagenPrincipal = reescalarIMG(url, 700);	
 		int width = imagenPrincipal.getWidth(null);
 		int height = imagenPrincipal.getHeight(null);
 
@@ -147,6 +147,10 @@ public class Editor extends Component {
 	public Image[][] getImagenes() {
 		return imagenes;
 	}
+	
+	public Image getImagenPrincipal() {
+		return imagenPrincipal;
+	}
 
 	public void rellenarPredetarminadas(ArrayList<String> predeterminadas) {
 		this.predeterminadas = new ArrayList<String>();
@@ -170,15 +174,15 @@ public class Editor extends Component {
 	}
 
 	public void facil() {
-		this.dificultad = 3;
+		Editor.dificultad = 3;
 	}
 
 	public void normal() {
-		this.dificultad = 8;
+		Editor.dificultad = 7;
 	}
 
 	public void dificil() {
-		this.dificultad = 14;
+		Editor.dificultad = 14;
 	}
 
 	public int getDificultad() {

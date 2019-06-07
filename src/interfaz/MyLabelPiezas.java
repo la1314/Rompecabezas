@@ -1,11 +1,16 @@
 package interfaz;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -75,9 +80,6 @@ public class MyLabelPiezas extends JLabel {
 					
 				if (getId() != ultimaPieza) {
 					
-//					jugabilidad.lectura();
-					
-//					System.out.println(getId());
 					
 					if (jugabilidad.comprobarMovimiento( getFila(), getColumna(), ultimaPieza)) {
 						
@@ -92,9 +94,23 @@ public class MyLabelPiezas extends JLabel {
 	}
 	
 	public void quitarIMG() {
+		
+		int auxiliar = this.getIcon().getIconHeight();
+
+		
 		this.setIcon(null);
+		this.setIcon(createImage(Color.BLACK, new Dimension(auxiliar, auxiliar)));
+		
 		this.revalidate();
 	}
+	
+	public Icon createImage(Color c, Dimension size) {
+        BufferedImage img = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.createGraphics();
+        g.setColor(c);
+        g.fillRect(0, 0, size.width, size.height);
+        return new ImageIcon(img);
+    }
 	
 	public void cambioPosicion(int x, int y) {
 		gbc_label = new GridBagConstraints();
