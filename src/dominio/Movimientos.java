@@ -17,6 +17,10 @@ public class Movimientos {
 		crearMatrices(dificultad);
 		
 	}
+	
+	public int[][] getMatrizAleatoria() {
+		return matrizAleatoria;
+	}
 
 	/*
 	 * Devuelve un vector con sus valores ordenados aleatoriamente
@@ -50,13 +54,13 @@ public class Movimientos {
 			}
 			System.out.println();
 		}
-		System.out.println();
-		for (int i = 0; i < matrizAleatoria.length; i++) {
-			for (int j = 0; j < matrizAleatoria.length; j++) {
-				System.out.print(matrizPrincipal[i][j] + "   ");
-			}
-			System.out.println();
-		}
+//		System.out.println();
+//		for (int i = 0; i < matrizAleatoria.length; i++) {
+//			for (int j = 0; j < matrizAleatoria.length; j++) {
+//				System.out.print(matrizPrincipal[i][j] + "   ");
+//			}
+//			System.out.println();
+//		}
 	}
 	
 	/*
@@ -73,7 +77,7 @@ public class Movimientos {
 			for (int j = 0; j < dificultad; j++) {
 				
 				matrizPrincipal[i][j] = iterador;
-				matrizAleatoria[i][j] = this.valoresAleatorios[iterador];
+				matrizAleatoria[j][i] = this.valoresAleatorios[iterador];
 				iterador++;
 			}
 		}
@@ -83,7 +87,7 @@ public class Movimientos {
 	/*
 	 * Devuelve TRUE si en los alrededores de la posición dada se encuentra ID
 	 */
-	public static boolean comprobarMovimiento(int[][] matrizAleatoria, int fila, int columna, int ID) {
+	public boolean comprobarMovimiento(int fila, int columna, int ID) {
 
 		/*
 		 * Implementación de los setters
@@ -161,6 +165,22 @@ public class Movimientos {
 
 		return movimientoPosible;
 	}
+	
+	/*
+	 * Cambiar posiciones
+	 */
+	public void cambiarPosicion(int filaInicio, int columnaInicio, int filaCambio, int columnaCambio ) {
+		
+		int valorInicio = matrizAleatoria[filaInicio][columnaInicio];
+		
+		System.out.println("ID INICIO " + matrizAleatoria[filaInicio][columnaInicio]);
+		System.out.println("ID CAMBIO " + matrizAleatoria[filaCambio][columnaCambio]);
+		
+		matrizAleatoria[filaInicio][columnaInicio] = matrizAleatoria[filaCambio][columnaCambio];
+		matrizAleatoria[filaCambio][columnaCambio] = valorInicio;
+		
+	}
+	
 	
 	/*
 	 * Compara ambas matrices, si en una iteración los valores no son iguales para el recorrido y devuelve FALSE

@@ -22,7 +22,7 @@ public class Editor extends Component {
 	private static final long serialVersionUID = 1L;
 	private Image[][] imagenes;
 	private ArrayList<String> predeterminadas;
-	private int dificultad;
+	public static int dificultad;
 
 	public Editor() {
 
@@ -170,7 +170,7 @@ public class Editor extends Component {
 	}
 
 	public void facil() {
-		this.dificultad = 5;
+		this.dificultad = 3;
 	}
 
 	public void normal() {
