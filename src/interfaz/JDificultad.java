@@ -8,20 +8,23 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
 import dominio.Editor;
+
+/**
+ * La clese JDificultad extiende de Jdialog, esta clase consta de 3 listener los cuales modificarán la dificultad del rompecabezas y llamarán nuevamente a la ventana principal
+ * de elección
+ * @author Jorge Durán
+ */
 
 public class JDificultad extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
+	private JPanel contentPanel = new JPanel();
 
 	/**
-	 * Create the dialog.
+	 * Cuando se instancia JDificultad requiere que se pasen como parámetro el Editor y InterfazRompecabezas para llamar a sus espectivas función en sus Listener
+	 * @param editor
+	 * @param interfaz
 	 */
 	public JDificultad(Editor editor, InterfazRompecabezas interfaz) {
 		

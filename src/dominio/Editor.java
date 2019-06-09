@@ -14,6 +14,19 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import interfaz.InterfazRompecabezas;
 
+/**
+ * <h1>Clase Editor</h1>
+ * Los atributos de clase son:
+ * 
+ * <ul>
+ * 	<li>imagenes</li>
+ * 	<li>predeterminadas</li>
+ * 	<li>dificultad</li>
+ * 	<li>provincias</li>
+ * 	<li>imagenPrincipal</li>
+ * </ul>
+ * @author Jorge Durán
+ */
 public class Editor extends Component {
 
 	/*
@@ -22,7 +35,7 @@ public class Editor extends Component {
 	private static final long serialVersionUID = 1L;
 	private Image[][] imagenes;
 	private ArrayList<String> predeterminadas;
-	public static int dificultad;
+	public static int DIFICULTAD;
 	Image imagenPrincipal;
 	public Editor() {
 
@@ -35,6 +48,14 @@ public class Editor extends Component {
 	 * Función para recortar la imagen, dichos recortes se añadirán
 	 * a la matriz de imagen
 	 */
+	
+	/**
+	 * Función que que rellena la matriz imagenes con la imagen pasada como parámetro tomando como tamaño el número de particiones
+	 * @param particiones
+	 * @param nombre
+	 * @throws IOException
+	 */
+
 	public void creandoParticiones(int particiones, String nombre) throws IOException {
 
 		URL url = getClass().getResource("/img/"+nombre+".png");
@@ -64,7 +85,13 @@ public class Editor extends Component {
 	}
 
 	/*
-	 * Función que escala la imagen pasada por url, devolviendo la imagen reescalada
+	 * Función que escala la imagen pasada por URL, devolviendo la imagen reescalada
+	 */
+	/**
+	 * Función que reescala la imagen resultante de la URL con el tamaño pasado como parámetro
+	 * @param url
+	 * @param tamanyo
+	 * @return
 	 */
 	public Image reescalarIMG(URL url, int tamanyo) {
 
@@ -78,7 +105,16 @@ public class Editor extends Component {
 		Image dimg = img.getScaledInstance(tamanyo, tamanyo, Image.SCALE_SMOOTH);
 		return dimg;
 	}
-
+	
+	/*
+	 * Función que escala la imagen pasada por File, devolviendo la imagen reescalada
+	 */
+	/**
+	 * Función que reescala la imagen resultante del File con el tamaño pasado como parámetro
+	 * @param file
+	 * @param tamanyo
+	 * @return
+	 */
 	public Image reescalarIMG(File file, int tamanyo) {
 
 		BufferedImage img = null;
@@ -95,6 +131,12 @@ public class Editor extends Component {
 	/*
 	 * Función que abre un FileChooser para subir una imagen propia, devuelve
 	 * una imagen a la cual se le aplicarán las funciones para crear un rompecabeza
+	 */
+	/**
+	 * Función que abre un FileChooser para subir una imagen propia, devuelve
+	 * una imagen a la cual se le aplicarán las funciones para crear un rompecabeza
+	 * @param dificultad
+	 * @param interfaz
 	 */
 	public void buscarImagen(int dificultad, InterfazRompecabezas interfaz) {
 
@@ -115,7 +157,7 @@ public class Editor extends Component {
 			File selectedFile = file.getSelectedFile();
 			File ruta = selectedFile.getAbsoluteFile();
 			
-			Image imagenPrincipal = reescalarIMG(ruta, 700);
+			imagenPrincipal = reescalarIMG(ruta, 700);
 			int width = imagenPrincipal.getWidth(null);
 			int height = imagenPrincipal.getHeight(null);
 
@@ -141,9 +183,6 @@ public class Editor extends Component {
 
 	}
 
-	/*
-	 * Getter de la Matriz imagenes
-	 */
 	public Image[][] getImagenes() {
 		return imagenes;
 	}
@@ -152,6 +191,13 @@ public class Editor extends Component {
 		return imagenPrincipal;
 	}
 
+	/*
+	 * Función que rellena el arrayList predeterminadas con los nombres de las imagenes por defecto
+	 */
+	/**
+	 * Función que rellena el ArrayList predeterminadas con los nombres de los rompecabezas por defecto
+	 * @param predeterminadas
+	 */
 	public void rellenarPredetarminadas(ArrayList<String> predeterminadas) {
 		this.predeterminadas = new ArrayList<String>();
 		this.predeterminadas.add("Hatsune");
@@ -169,24 +215,40 @@ public class Editor extends Component {
 		return predeterminadas;
 	}
 
-	public void ladosImagen(int lados) {
-		imagenes = new Image[lados][lados];
+	/**
+	 * inicializa la matriz imagenes con el número de lados pasado por pa´rametro
+	 * @param tamanyo
+	 */
+	public void ladosImagen(int tamanyo) {
+		imagenes = new Image[tamanyo][tamanyo];
 	}
 
+	/**
+	 * modifica la constante dificulad
+	 */
 	public void facil() {
-		Editor.dificultad = 3;
+		Editor.DIFICULTAD = 3;
 	}
 
+	/**
+	 * modifica la constante dificulad
+	 */
 	public void normal() {
-		Editor.dificultad = 7;
+		Editor.DIFICULTAD = 7;
 	}
 
+	/**
+	 * modifica la constante dificulad
+	 */
 	public void dificil() {
-		Editor.dificultad = 14;
+		Editor.DIFICULTAD = 14;
 	}
 
+	/*
+	 * Esto no debería ser una constante pero de eso se encargará el Jorge del futuro cuando le apetezca refactorizar.
+	 */
 	public int getDificultad() {
-		return dificultad;
+		return DIFICULTAD;
 	}
 
 }

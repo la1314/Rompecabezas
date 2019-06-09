@@ -11,20 +11,27 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Dimension;
 
+/**
+ * La clese JDGanador extiende de Jdialog, está es instanciada cuando se completa el rompecabezas felicitando al jugador
+ * <h1>Clase EditJDGanadoror</h1>
+ * Los atributos de clase son:
+ * <ul>
+ * 	<li>contentPanel</li>
+ * 	<li>txtfelicidades</li>
+ * </ul>
+ * @author Jorge Durán
+ */
 
 public class JDGanador extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private MyField txtfelicidades;
 
-
-
 	/**
-	 * Create the dialog.
+	 * Cuando se instancia se pasa por parámetro la clase InterfazRompecabezas para llamar a su función insertarElecciones()
+	 * si se presiona en OK
+	 * @param interfaz
 	 */
 	public JDGanador(InterfazRompecabezas interfaz) {
 		
